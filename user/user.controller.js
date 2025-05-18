@@ -13,13 +13,12 @@ else
 }
 export async function getUserById(req,res){
 
-    //let id = req.params.id
     let { id } = req.params
 
     let user = await User.getUsers(id)
 
    if(!user)
-    return res.status(404).json({message:"user were not found"})
+    return res.status(404).json({message:"user were not found by id"})
 
    else
     return res.status(200).json({message:"seccesus",user})
@@ -95,11 +94,17 @@ return res.status(200).json({message:"user found",user})
 
 }
 
-export async function login(res,req) {
+export async function login(req,res) {
     let {email,password} = req.body
     if(!email || !password)
     return res.status(400).json({message:"missing info"})
-    let user = await User.login(email,password)
+    let user = await User.Login(email)
+    console.log('user', user)
+    if(user ===null)
+        return res.status(404).json({message:"user not found",user})
+    if(bcrypt.compareSync(password,user.pass))
+    return res.status(200).json({message:"user logged in",user})
+    return res.status(404).json({message:"user not found"})
 
 }
 

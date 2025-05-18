@@ -21,7 +21,7 @@ export default class User {
     }
 
     async addUser() {
-        return db.addUserToDB(this);
+        return await db.addUserToDB(this);
 
     }
 
@@ -35,12 +35,13 @@ export default class User {
         }
     }
 
-    async Login(email, pass) {
-       return await db.LoginToUser(email,pass,"user")
+   static async Login(email) {
+        return await db.LoginToUser(email,"user")
+    
     }
     
-    static async IsEmailTaken(email,username){
-        return await db.isEmailTaken(email,username)
+    static async IsEmailTaken(email){
+        return await db.isEmailTaken(email)
     }
 
    static async IsUsernameExists(username){

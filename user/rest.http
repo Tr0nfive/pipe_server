@@ -25,5 +25,16 @@ GET http://localhost:3000/api/user/exists/id/68231a5df05ce965f5ee3136
 GET http://localhost:3000/api/user/exists/username/hello
 
 ###
-
+//check if the email is already taken
 GET http://localhost:3000/api/user/exists/email/hello@bcrypt.test
+
+
+###
+
+GET http://localhost:3000/api/user/login/
+Content-Type: application/json
+
+{
+    "email":"user@test.com",
+    "password":"123456lo"
+}

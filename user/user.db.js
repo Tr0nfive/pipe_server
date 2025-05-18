@@ -1,5 +1,5 @@
 import { MongoClient, ObjectId } from "mongodb";
-import bcrypt from 'bcryptjs'
+
 
 
 
@@ -12,7 +12,7 @@ export async function findAllUsers() {
     try {
         client = await MongoClient.connect(process.env.CONNECTION_STRING);
         const db = client.db(process.env.DB_NAME);
-        return await db.collection("users").find().toArray();
+        return await db.collection("users").find({}).toArray();
     }
     catch (err) {
         console.error("Error finding users", err)
@@ -29,7 +29,7 @@ export async function findUserById(id) {
     try {
         client = await MongoClient.connect(process.env.CONNECTION_STRING);
         const db = client.db(process.env.DB_NAME);
-        return await db.collection("users").findOne({ _id: new ObjectId(id) });
+       return await db.collection("users").findOne({ _id: new ObjectId(id) });
     }
     catch (err) {
         console.error("Error finding users", err)
@@ -109,24 +109,14 @@ export async function isEmailTaken(email){
     }
 }
 
-export async function LoginToUser(email, pass, role) {
+export async function LoginToUser(email, role) {
     let client = null;
     try {
         client = await MongoClient.connect(process.env.CONNECTION_STRING);
-        let db = await client.db(process.env.DB_NAME);
-
-        await db.collection("users").findOne({ email: email, role: role }).then(user => {
-            if (user) {
-                bcrypt.compareSync(pass, user.pass, (err, result) => {
-                    if (result)
-                        return user
-                    if (err)
-                        console.error("password didnt match", err)
-                })
-            }
-        })
+        let db =  client.db(process.env.DB_NAME);
+       return await db.collection("users").findOne({ email: email, role: role })
     }
-    catch (err) {
+    catch (err) {   
 
         console.error("user wasnt found", err)
     }
