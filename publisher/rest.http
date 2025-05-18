@@ -1,0 +1,17 @@
+
+
+// create a publisher account
+POST  http://localhost:3000/api/publisher/create
+    Content-Type: application/json
+    {
+        "name":"testPublisher",
+        "email":"publisher@test.com",
+        "password":"123456"
+    }
+
+###
+
+//get publisher by id
+
+GET http://localhost:3000/api/publisher/6829896436650aaeedbe6649
+
