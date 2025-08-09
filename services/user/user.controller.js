@@ -1,28 +1,7 @@
     import User from "./user.model.js"
-    import bcrypt from 'bcryptjs'
+   
+    
 
-export async function get_all_users (req,res) {
-
-let users  =  await User.getUsers()
-if(!users)
-    return res.status(404).json({message:"no users were found"}).send()
-
-else
-    return res.status(200).json({message:"seccesus",users}).send()
-
-}
-export async function getUserById(req,res){
-
-    let { id } = req.params
-
-    let user = await User.getUsers(id)
-
-   if(!user)
-    return res.status(404).json({message:"user were not found by id"})
-
-   else
-    return res.status(200).json({message:"seccesus",user})
-}
 
 export async function addUser(req,res) {
     let {email,password,username} = req.body
@@ -31,14 +10,13 @@ export async function addUser(req,res) {
     }
     
     if(await User.IsEmailTaken(email))
-        return res.status(404).json({message:"email already exists"})
+        return res.status(226).json({message:"email already exists"})
     let regPass = new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/)
     if(!regPass.test(password))
         return res.status(404).json({message:"invalid password"})
     if(await User.IsUsernameExists(username))
-        return res.status(404).json({message:"username already exists"})
-    let newPass = bcrypt.hashSync(password,12)
-    let user = new User(email,newPass,username)
+        return res.status(226).json({message:"username already exists"})
+    let user = new User(email,password,username)
     await user.addUser()
     return res.status(200).json({message:"user added",user})
 
@@ -65,19 +43,19 @@ export async function isUsernameExists(req,res){
     let name = await User.IsUsernameExists(username)
     console.log(name)
     if(!name)
-    return res.status(200).json({message:"username not found"})
-    return res.status(300).json({message:"username already exists"})
+    return res.status(200).json({message:"username isnt taken"})
+    return res.status(226).json({message:"username already exists"})
 }
 
 export async function isEmailExists(req,res){
     let {email} = req.params
-    if(!email)
-    return res.status(400).json({message:"missing user info"})
+    //if(!email)
+    //return res.status(400).json({message:"missing user info"})
     let name = await User.IsEmailTaken(email)
     console.log('name', name)
     if(name ===null)
-    return res.status(200).json({message:"email not found"})
-    return res.status(300).json({message:"email already exists"})
+    return res.status(200).json({message:"email not found",name})
+    return res.status(226).json({message:"email already exists",name})
 }
 
 
@@ -96,25 +74,42 @@ return res.status(200).json({message:"user found",user})
 
 export async function login(req,res) {
     let {email,password} = req.body
+    
     if(!email || !password)
     return res.status(400).json({message:"missing info"})
-    let user = await User.Login(email)
+    console.log('email', email)
+    console.log('password', password)
+    let user = await User.Login(email,password)
     console.log('user', user)
-    if(user ===null)
-        return res.status(404).json({message:"user not found",user})
-    if(bcrypt.compareSync(password,user.pass))
+    
+    if(!user)
+    return res.status(400).json({message:"the email or the password is incorrect"})
+    
     return res.status(200).json({message:"user logged in",user})
-    return res.status(404).json({message:"user not found"})
 
 }
 
-export function get_user_data (req,res) {
-res.send("get_user_data")
-}
-export function get_game_store_data (req,res) {
-res.send("get_game_store_data")
+export async function updateUserEmail(req,res){
+    let {id} = req.params
+    let {email} = req.body
+    if(!id || !email)
+    return res.status(400).json({message:"missing info"})
+    if(await User.IsEmailTaken(email))
+        return res.status(226).json({message:"email already exits"})
+    let user = await User.updateEmail(id,email)
+    if(!user)
+        return res.status(400).json({message:"user not found"})
+    return res.status(200).json({message:"user updated",user})
 }
 
-export function get_game_install_data (req,res) {
-res.send("get_game_install_data")
+export async function updateUserPassword(req,res){
+    let {id} = req.params
+    let {currPass,newPass,confirmPass} = req.body
+    if(!id || !currPass || !newPass || !confirmPass)
+        return res.status(400).json({message:"missing info"})
+    
+    
+    
 }
+
+

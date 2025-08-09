@@ -1,5 +1,0 @@
-
-
-//check if developer exists and get info
-GET http://localhost:3000/api/developers/6825c687143a53c659e36711
-

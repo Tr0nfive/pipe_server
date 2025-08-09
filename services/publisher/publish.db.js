@@ -23,7 +23,7 @@ export async function getPublisherFromDB(id) {
     try {
         client = await MongoClient.connect(process.env.CONNECTION_STRING);
         let db = client.db(process.env.DB_NAME);
-        return await db.collection("users").findOne({ _id: new ObjectId(id) });
+        return await db.collection("users").findOne({ _id: new ObjectId(id) },{projection:{}});
     }
     catch (err) {
         console.error("could not find user", err)

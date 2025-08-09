@@ -1,11 +1,13 @@
+import { ROLES } from "../Roles.js";
 import { getDeveloperById,createDev } from "./devs.db.js";
 
 export default class Devs{
-    constructor(name,email,password){
+    constructor(name,email,password,role = ROLES.DEV){
         this.name=name;
         this.email=email;
-        this.password=password;
-        this.role = "developer"
+        this.pass=password;
+        this.role=role;
+        
     }
 
    static async getDevByID(id){
