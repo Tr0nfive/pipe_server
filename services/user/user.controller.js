@@ -44,18 +44,18 @@ export async function isUsernameExists(req,res){
     console.log(name)
     if(!name)
     return res.status(200).json({message:"username isnt taken"})
-    return res.status(226).json({message:"username already exists"})
+    return res.status(400).json({message:"username already exists"})
 }
 
 export async function isEmailExists(req,res){
     let {email} = req.params
-    //if(!email)
-    //return res.status(400).json({message:"missing user info"})
-    let name = await User.IsEmailTaken(email)
-    console.log('name', name)
-    if(name ===null)
-    return res.status(200).json({message:"email not found",name})
-    return res.status(226).json({message:"email already exists",name})
+    if(!email)
+    return res.status(400).json({message:"missing user info"})
+    let Email = await User.IsEmailTaken(email)
+    console.log('name', Email)
+    if(Email ===null)
+    return res.status(200).json({message:"email not found",Email})
+    return res.status(400).json({message:"email already exists",Email})
 }
 
 
@@ -74,17 +74,19 @@ return res.status(200).json({message:"user found",user})
 
 export async function login(req,res) {
     let {email,password} = req.body
-    
+    console.log('email', email)
+    console.log('password', password)
     if(!email || !password)
     return res.status(400).json({message:"missing info"})
     console.log('email', email)
     console.log('password', password)
     let user = await User.Login(email,password)
+    console.log('user - controller', user)
     console.log('user', user)
     
     if(!user)
-    return res.status(400).json({message:"the email or the password is incorrect"})
-    
+        return res.status(400).json({message:"the email or the password is incorrect"})
+    else
     return res.status(200).json({message:"user logged in",user})
 
 }
@@ -111,5 +113,29 @@ export async function updateUserPassword(req,res){
     
     
 }
+
+export async function updateUserUsername(req,res){
+    let {id} = req.params
+    let {username} = req.body
+    if(!id || !username)
+        return res.status(400).json({message:"missing info"})
+    if(username.length < 3)
+        return res.status(400).json({message:"invalid username"})
+    if(await User.IsUsernameExists(username))
+        return res.status(226).json({message:"username already exists"})
+    let user = await User.updateUsername(id,username)
+    if(!user)
+        return res.status(400).json({message:"user not found"})
+    return res.status(200).json({message:"user updated",user})
+}
+
+export async function getGamesStore(req,res){
+    let games = await User.getGamesStore()
+    if(!games)
+        return res.status(404).json({message:"games not found"})
+    return res.status(200).json({message:"games found",games})
+}
+
+
 
 

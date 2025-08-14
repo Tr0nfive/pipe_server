@@ -2,21 +2,20 @@
 
 @host = http://localhost:3000/api/
 //request all the users in the user collctions
-GET {{host}}user/ 
+GET {{host}}user/
 
 ###
 //request a spesifc user by his id
-GET {{host}}user/exists/id/683e919375e6d11ac1b0b1fe
-
+GET {{host}}user/exists/id/689c3131f84219f8f6ff1c9f
 ###
 //add a new user
 POST {{host}}user/add
 Content-Type: application/json
 
 {
-    "email":"user@test.com",
-    "password":"123456lo",
-    "username":"userTest2"
+    "email":"hello@123.com",
+    "password":"123456Lo",
+    "username":"hello"
 }
 ###
 // check to see if a user exists by his id
@@ -24,23 +23,27 @@ GET {{host}}user/exists/id/68414644d02a10f893c773c0
 ###
 
 //check if the username is already taken
-GET {{host}}user/exists/username/userTest
+GET {{host}}user/exists/username/hello
 
 ###
 //check if the email is already taken
-GET {{host}}user/exists/email/user@test.com
+GET {{host}}user/exists/email/hello@world.com
 
 ###
 
-POST  {{host}}user/login
+POST {{host}}user/login
 Content-Type: application/json
 
-{
-    "email":"user@test.com",
-    "password":"123456lo",
-    "role":"userTest"
+{           
+    "email":"hello@hello.com",
+    "password":"123456Lo",
+    "role":"user"
 }
 
 ###
 
-GET {{host}}user/
+
+
+GET {{host}}user/games
+###
+

@@ -29,13 +29,18 @@ export default class User {
     }
 
     static async Login(email, password) {
+        console.log('got to user model login')
         let user = await db.LoginToUser(email, "user");
+        
         console.log('user - model', user)
-        console.log('password - model',bcrypt.compareSync(password, user.pass))
+       
+        
+        console.log("model login bycrypt", bcrypt.compareSync(password, user.pass))
         if (user && bcrypt.compareSync(password, user.pass)) {
             let token = jwt.sign(user, 'echo', { algorithm: 'HS256' })
             return token;
         }
+        return null;
     }
 
     static async IsEmailTaken(email) {
@@ -54,6 +59,14 @@ export default class User {
 
     static async addGameToUserWishlist(userId, gameId) {
         return await db.addToUserWishlist(userId, gameId);
+    }
+
+    static async updateUserUsername(id, username) {
+        return await db.updateUsername(id, username)
+    }
+
+    static async getGamesStore(){
+        return await db.getGamesStore();
     }
 
 }

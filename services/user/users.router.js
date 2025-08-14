@@ -10,7 +10,8 @@ userRouter
     .get('/libary/:id',authUser,user.getUserLibary)
     .get('/exists/username/:username',user.isUsernameExists)
     .get('/exists/email/:email',user.isEmailExists)
-    .post('/login',authUser,user.login)
+    .get('/games',user.getGamesStore)
+    .post('/login',user.login)
     .post('/add',user.addUser)
     .put('/update/email/:id',authUser,user.updateUserEmail)
     

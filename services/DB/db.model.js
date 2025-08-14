@@ -20,7 +20,7 @@ export default class DB {
     async addDoc(collection, doc) {
         try {
             await this.client?.connect()
-           return await this.client.db(this.db).collection(collection).insertOne({ doc })
+           return await this.client.db(this.db).collection(collection).insertOne( doc )
         } catch (error) {
             writeLogDB(error, { func: 'addDoc', collc: collection, doc: doc })
             console.log('error', error)
@@ -54,6 +54,20 @@ export default class DB {
             let data = { func: 'getDocById', collc: collection, id: id, projection: projection }
             writeLogDB(error, data)
             console.log('error', error);
+        }
+        finally {
+            await this.client?.close()
+        }
+    }
+    async getDoc(collection, filter = {}, projection = {}) {
+        try {
+            await this.client?.connect()
+            console.log("getdoc", collection, filter, projection)
+            return await this.client.db(this.db).collection(collection).findOne({ filter }, { projection })
+        }
+        catch (error) {
+            writeLogDB(error, { func: 'getDoc', collc: collection, filter: filter, projection: projection })
+            console.log('error', error)
         }
         finally {
             await this.client?.close()
