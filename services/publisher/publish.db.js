@@ -4,7 +4,7 @@ import { MongoClient, ObjectId } from "mongodb";
 export async function createPublishInDB(publish) {
     let client = null;
     try {
-         client = await MongoClient.connect(process.env.CONNECTION_STRING);
+         client = await MongoClient.connect(process.env.MONGO_URI);
         const db = client.db(process.env.DB_NAME);
         return await db.collection("users").insertOne(publish);
 
@@ -21,7 +21,7 @@ export async function createPublishInDB(publish) {
 export async function getPublisherFromDB(id) {
     let client = null;
     try {
-        client = await MongoClient.connect(process.env.CONNECTION_STRING);
+        client = await MongoClient.connect(process.env.MONGO_URI);
         let db = client.db(process.env.DB_NAME);
         return await db.collection("users").findOne({ _id: new ObjectId(id) },{projection:{}});
     }

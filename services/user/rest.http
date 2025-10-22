@@ -19,7 +19,7 @@ Content-Type: application/json
 }
 ###
 // check to see if a user exists by his id
-GET {{host}}user/exists/id/68414644d02a10f893c773c0
+GET {{host}}user/exists/id/689c99b1585a07b7c20dc7d0
 ###
 
 //check if the username is already taken
@@ -27,7 +27,7 @@ GET {{host}}user/exists/username/hello
 
 ###
 //check if the email is already taken
-GET {{host}}user/exists/email/hello@world.com
+GET {{host}}user/exists/email/hello@hello.com
 
 ###
 
@@ -47,3 +47,58 @@ Content-Type: application/json
 GET {{host}}user/games
 ###
 
+GET {{host}}user/game/6899fa87ee088e7f1fa2dbb3
+
+
+###
+POST {{host}}user/wishlist/add
+Content-Type: application/json
+
+{
+    
+    "userId":"689c99b1585a07b7c20dc7d0",
+    "gameId":"6899fa87ee088e7f1fa2dbb3",
+    "role":"user"
+    
+}
+
+###
+GET {{host}}user/wishlist/689c99b1585a07b7c20dc7d0
+
+###
+DELETE {{host}}user/wishlist/remove
+Content-Type: application/json
+
+{
+    
+    "userId":"689c99b1585a07b7c20dc7d0",
+    "gameId":"6899fa87ee088e7f1fa2dbb3"
+}
+
+###
+
+GET {{host}}user/exists/wishlist/game
+content-Type: application/json
+
+{
+    
+    "userId":"689c99b1585a07b7c20dc7d0",
+    "gameId":"6899fa87ee088e7f1fa2dbb3"
+}
+
+
+###
+
+POST {{host}}user/lib/add
+Content-Type: application/json
+
+{
+    
+    "userId":"689c99b1585a07b7c20dc7d0",
+    "gameId":"68e63553c4b7cf97ed236e3f",
+    "role":"user"
+    
+}
+
+###
+GET {{host}}user/lib/689c99b1585a07b7c20dc7d0

@@ -1,0 +1,20 @@
+
+
+@host = http://localhost:3000/api/
+
+###
+GET {{host}}store
+
+###
+
+GET {{host}}store/search/b
+
+###
+GET {{host}}store/page/6899fa87ee088e7f1fa2dbb3
+
+###
+
+GET {{host}}store/hardware
+
+###
+GET {{host}}store/6899fa87ee088e7f1fa2dbb3/req

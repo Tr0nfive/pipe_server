@@ -1,26 +1,41 @@
 import { ROLES } from "../services/Roles.js";
+import jwt from "jsonwebtoken"
 
-export  async function authUser(req, res, next){
-    let { role } = req.body;
-    if(role != ROLES.USER)
-        return res.status(403).json({message:"you dont have access ,auth faild",
-    currRole:role,reqRole:ROLES.USER})
-    next()
 
+export function authUser(req, res, next) {
+  const header = req.headers["authorization"];
+  if (!header || !header.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "missing or invalid Authorization header" });
+  }
+
+  const token = header.slice(7); // remove "Bearer "
+
+  try {
+    const payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+
+    // Attach user info to req for later use
+    req.user = {
+      id: payload._id,   // or payload.id if you switched to custom claim
+      role: payload.role
+    };
+
+    next();
+  } catch (err) {
+    return res.status(401).json({ message: "invalid or expired token" });
+  }
 }
-
-export async function authPublisher(req, res, next){
-    let { role } = req.body;
-    if(role != ROLES.PUBLISHER)
-        return res.status(403).json({message:"you dont have access ,auth faild",
-    currRole:role,reqRole:ROLES.PUBLISHER})
-    next()
-}
-
-export async function authDev(req, res, next){
-    let { role } = req.body;
-    if(role != ROLES.DEV)
-        res.status(403).json({message:"you dont have access ,auth faild",
-    currRole:role,reqRole:ROLES.DEV})
-    next()
+/** 
+* Extra middleware factory: require specific roles.
+* Usage: router.get("/admin", authUser, requireRole("ADMIN"), handler)
+*/
+export function requireRole(...roles) {
+ return (req, res, next) => {
+   if (!req.user) {
+     return res.status(401).json({ message: "not authenticated" });
+   }
+   if (!roles.includes(req.user.role)) {
+     return res.status(403).json({ message: "forbidden: insufficient role" });
+   }
+   next();
+ };
 }

@@ -1,5 +1,16 @@
 @host = http://localhost:3000/api/
 
 //check if developer exists and get info
-GET {{host}}developers/6825c687143a53c659e36711
+GET {{host}}dev/68f50c711e0859db59d3966e
+
+
+###
+POST {{host}}dev/create
+Content-Type: application/json
+
+{
+  "name": "rablon",
+  "email": "dev@dev.com",
+  "password": "devops472"
+}
 
